@@ -23,7 +23,7 @@ mongoose
 
 app.use(
   cors({
-    origin: 'https://interact-calendar.vercel.app',
+    origin: 'https://calendar-tawny-ten.vercel.app',
   })
 );
 
