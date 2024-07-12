@@ -21,8 +21,3 @@ const eventSchema = new mongoose.Schema({
 const Event = mongoose.model('Event', eventSchema);
 
 module.exports = Event;
-
-
-const MONGO_URI =
-  'mongodb+srv://jhezer1991:235a36a29a@alexinteractivecalendar.mpa6izo.mongodb.net/';
-const BOT_TOKEN = '7302735948:AAGBs9jAgqr0yEUPzb_sjoz9piMXJB84G5w';
