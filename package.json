@@ -1,0 +1,11 @@
+{
+  "name": "int-cal",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server/index.js",
+    "install-frontend": "cd frontend && npm install",
+    "build-frontend": "cd frontend && npm run build",
+    "build": "cd frontend && react-scripts build && cd .. && node server/index.js"
+  }
+}
