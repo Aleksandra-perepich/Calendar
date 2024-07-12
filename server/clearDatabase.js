@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Booking = require('./models/Booking');
 
 const MONGO_URI =
-  'mongodb+srv://jhezer1991:235a36a29a@alexinteractivecalendar.mpa6izo.mongodb.net/';
+  'mongodb+srv://Aleksandra:.8946jM7F$Utg+*@calendar.gomanfl.mongodb.net/';
 mongoose
   .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {

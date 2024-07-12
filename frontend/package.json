@@ -17,9 +17,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "vercel-build": "REACT_APP_SERVER_URL=https://interactcalendar.onrender.com react-scripts build"
+    "vercel-build": "REACT_APP_SERVER_URL=https://calendar-d1rw.onrender.com react-scripts build"
   },
-    "proxy": "https://interactcalendar.onrender.com",
+    "proxy": "https://calendar-d1rw.onrender.com",
   "main": "index.js",  
   "eslintConfig": {
     "extends": [
