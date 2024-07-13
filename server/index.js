@@ -36,6 +36,23 @@ const bot = new Telegraf(BOT_TOKEN);
 bot.telegram.setWebhook(`${URL}/bot${BOT_TOKEN}`);
 app.use(bot.webhookCallback(`/bot${BOT_TOKEN}`));
 
+app.post('/api/sendTelegramMessage', async (req, res) => {
+  const { message } = req.body;
+
+  try {
+    const response = await axios.post(
+      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+      {
+        chat_id: '-1002189653449',
+        text: message,
+      }
+    );
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to send message' });
+  }
+});
+
 // Переменные для хранения состояния пользователя
 const userState = {};
 
