@@ -103,7 +103,7 @@ function App() {
         >
           {deployLoading ? 'Deploying...' : 'Trigger Deploy'}
         </button>
-        <p>{deployResponse}</p>
+        {/* <p>{deployResponse}</p> */}
       </header>
       <main>
         <section className="controls">
