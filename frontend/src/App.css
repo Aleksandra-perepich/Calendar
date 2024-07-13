@@ -1,82 +1,174 @@
-/* .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-} */
-
 /* App.css */
 
 .app {
-  font-family: 'Arial', sans-serif;
+  font-family: Arial, sans-serif;
   padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
 }
 
-h1 {
-  text-align: center;
-  color: #333;
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  flex-wrap: wrap;
+}
+
+.deploy-button,
+.telegram-container button {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.deploy-button:hover,
+.telegram-container button:hover {
+  background-color: #218838;
+}
+
+.deploy-button:disabled,
+.telegram-container button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.deploy-response,
+.telegram-response {
+  margin-top: 10px;
+  color: #007bff;
+}
+
+.content {
+  margin-top: 20px;
 }
 
 .level-select {
-  margin: 20px 0;
-  text-align: center;
+  margin-bottom: 20px;
 }
 
 .level-select label {
   margin-right: 10px;
-  font-size: 18px;
-}
-
-select {
-  padding: 5px;
-  font-size: 16px;
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin: 20px 0;
+  margin-bottom: 20px;
 }
 
 .form-group input {
-  padding: 10px;
-  font-size: 16px;
+  margin-right: 10px;
+  padding: 5px;
 }
+
+.form-group button {
+  padding: 5px 10px;
+}
+
+.bookings-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.booking-item {
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.booking-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.booking-info span {
+  margin-right: 10px;
+}
+
+.participants-list {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.participant-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+}
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 4px solid #3498db;
+  width: 30px;
+  height: 30px;
+  animation: spin 2s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.telegram-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 10px;
+}
+
+.telegram-container textarea {
+  width: 100%;
+  min-height: 50px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Mobile Styles */
+@media (max-width: 600px) {
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .deploy-button,
+  .telegram-container button {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .telegram-container {
+    width: 100%;
+  }
+
+  .booking-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .booking-info span {
+    margin-bottom: 5px;
+  }
+
+  .participant-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .participant-item span {
+    margin-bottom: 5px;
+  }
+}
+
 
  button {
   background-color: #007bff;
@@ -87,72 +179,3 @@ select {
   padding: 10px;
 }
 
-.form-group button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.loader {
-  border: 4px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 4px solid #007bff;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin: 20px auto;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.bookings-list {
-  list-style-type: none;
-  padding: 0;
-}
-
-.booking-item {
-  margin: 20px 0;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-.booking-info {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.participants-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 10px 0 0 0;
-}
-
-.participant-item {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-/* Media queries for mobile devices */
-@media (min-width: 600px) {
-  .form-group {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .booking-info {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .participant-item {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-}
