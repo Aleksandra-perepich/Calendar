@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './App.css'; // Добавим файл стилей
+import './App.css';
 
 function App() {
   const [level, setLevel] = useState('beginner');
@@ -11,8 +11,8 @@ function App() {
   const [newTime, setNewTime] = useState('');
   const [themes, setThemes] = useState('');
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
   const [deployResponse, setDeployResponse] = useState('');
-  const [telegramMessage, setTelegramMessage] = useState('');
   const [telegramResponse, setTelegramResponse] = useState('');
 
   useEffect(() => {
@@ -64,140 +64,108 @@ function App() {
     setLoading(false);
   };
 
-  const handleDeploy = async () => {
-    setLoading(true);
+  const triggerDeploy = async () => {
     try {
       const response = await axios.post(
-        'https://api.render.com/deploy/srv-' //TODO-need to change
+        'https://api.render.com/deploy/srv-cq051aqju9rs73aoguf0?key=JbMC93Cy3E8'
       );
-      setDeployResponse(response.data);
+      setDeployResponse(response.data.message);
     } catch (error) {
-      setDeployResponse('Deploy failed');
+      setDeployResponse('Failed to trigger deploy');
     }
-    setLoading(false);
   };
 
-  const handleTelegramSend = async () => {
-    setLoading(true);
+  const sendMessageToTelegram = async () => {
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/api/sendTelegramMessage`,
-        {
-          message: telegramMessage,
-        }
-      );
-      setTelegramResponse(response.data);
+      const response = await axios.post('/api/sendTelegramMessage', {
+        message,
+      });
+      setTelegramResponse(response.data.message);
     } catch (error) {
       setTelegramResponse('Failed to send message');
     }
-    setLoading(false);
   };
 
   return (
-    <div className="app">
-      <header className="app-header">
+    <div className="container">
+      <header className="header">
         <h1>Booking System</h1>
-        <button
-          onClick={handleDeploy}
-          className="deploy-button"
-          disabled={loading}
-        >
-          Deploy App
+        <button className="deploy-button" onClick={triggerDeploy}>
+          Trigger Deploy
         </button>
-        {/* {deployResponse && (
-          <div className="deploy-response">{deployResponse}</div>
-        )} */}
-        <div className="telegram-container">
-          <textarea
-            value={telegramMessage}
-            onChange={(e) => setTelegramMessage(e.target.value)}
-            placeholder="Enter message to send to Telegram"
-          ></textarea>
-          <button onClick={handleTelegramSend} disabled={loading}>
-            Send to Telegram
-          </button>
-        </div>
-        {telegramResponse && (
-          <div className="telegram-response">{telegramResponse}</div>
-        )}
+        <p>{deployResponse}</p>
       </header>
-      <div className="content">
-        <div className="level-select">
-          <label>Select Level:</label>
+      <main>
+        <section className="controls">
           <select value={level} onChange={(e) => setLevel(e.target.value)}>
             <option value="beginner">Beginner</option>
             <option value="intermediate">Intermediate</option>
             <option value="advanced">Advanced</option>
           </select>
-        </div>
-        <h2>Add New Date</h2>
-        <div className="form-group">
-          <input
-            type="date"
-            value={newDate}
-            onChange={(e) => setNewDate(e.target.value)}
-          />
-          <input
-            type="time"
-            value={newTime}
-            onChange={(e) => setNewTime(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Themes (comma separated)"
-            value={themes}
-            onChange={(e) => setThemes(e.target.value)}
-          />
-          <button onClick={addBooking} disabled={loading}>
-            Add Date
-          </button>
-        </div>
-        <h2>Available Dates</h2>
-        {loading ? (
-          <div className="loader"></div>
-        ) : (
-          <ul className="bookings-list">
-            {bookings.map((booking) => (
-              <li key={booking._id} className="booking-item">
-                <div className="booking-info">
-                  <span>{booking.date}</span>
-                  <span>{booking.time}</span>
-                  <span>{booking.themes.join(', ')}</span>
-                  <button
-                    onClick={() => deleteBooking(booking._id)}
-                    disabled={loading}
-                  >
+          <div className="add-booking">
+            <h2>Add New Date</h2>
+            <input
+              type="date"
+              value={newDate}
+              onChange={(e) => setNewDate(e.target.value)}
+            />
+            <input
+              type="time"
+              value={newTime}
+              onChange={(e) => setNewTime(e.target.value)}
+            />
+            <input
+              type="text"
+              value={themes}
+              onChange={(e) => setThemes(e.target.value)}
+              placeholder="Themes (comma separated)"
+            />
+            <button onClick={addBooking}>Add Date</button>
+          </div>
+        </section>
+        <section className="bookings">
+          <h2>Available Dates</h2>
+          {loading ? (
+            <div className="loader"></div>
+          ) : (
+            <ul>
+              {bookings.map((booking) => (
+                <li key={booking._id}>
+                  {booking.date} {booking.time} {booking.themes.join(', ')}
+                  <button onClick={() => deleteBooking(booking._id)}>
                     Delete Date
                   </button>
-                </div>
-                <ul className="participants-list">
-                  {booking.participants.map((participant) =>
-                    participant ? (
-                      <li key={participant.id} className="participant-item">
-                        <span>{participant.name || 'No name'}</span>
-                        <span>{participant.phone || 'No phone'}</span>
-                        <span>{participant.theme || 'No theme'}</span>
+                  <ul>
+                    {booking.participants.map((participant) => (
+                      <li key={participant.id}>
+                        {/* {participant.name || 'No name'}{' '} */}
+                        Contact: {participant.phone || 'No phone'}{' '}
+                        Topic: {participant.theme || 'No theme'}
                         <button
                           onClick={() =>
                             deleteParticipant(booking._id, participant.id)
                           }
-                          disabled={loading}
                         >
                           Remove Participant
                         </button>
                       </li>
-                    ) : (
-                      <li key={Math.random()} className="participant-item">
-                        Participant data is missing
-                      </li>
-                    )
-                  )}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+        <section className="telegram">
+          <textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Type your message here"
+          />
+          <button onClick={sendMessageToTelegram}>Send to Telegram</button>
+          <p>{telegramResponse}</p>
+        </section>
+      </main>
     </div>
   );
 }
