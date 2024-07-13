@@ -63,7 +63,7 @@ function App() {
 
   return (
     <div className="app">
-      <h1>Booking System</h1>
+      <h1>Managment System</h1>
       <div className="level-select">
         <label>Select Level:</label>
         <select value={level} onChange={(e) => setLevel(e.target.value)}>
