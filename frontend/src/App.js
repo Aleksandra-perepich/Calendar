@@ -14,6 +14,7 @@ function App() {
   const [message, setMessage] = useState('');
   const [deployResponse, setDeployResponse] = useState('');
   const [telegramResponse, setTelegramResponse] = useState('');
+  const [deployLoading, setDeployLoading] = useState(false);
 
   useEffect(() => {
     fetchBookings(level);
@@ -65,13 +66,18 @@ function App() {
   };
 
   const triggerDeploy = async () => {
+    setDeployLoading(true);
     try {
       const response = await axios.post(
         'https://api.render.com/deploy/srv-cq051aqju9rs73aoguf0?key=JbMC93Cy3E8'
       );
-      setDeployResponse(response.data.message);
+      setDeployResponse(
+        `Deploy triggered successfully: ${JSON.stringify(response.data)}`
+      );
     } catch (error) {
-      setDeployResponse('Failed to trigger deploy');
+      setDeployResponse(`Failed to trigger deploy: ${error.message}`);
+    } finally {
+      setDeployLoading(false);
     }
   };
 
@@ -82,7 +88,7 @@ function App() {
       });
       setTelegramResponse(response.data.message);
     } catch (error) {
-      setTelegramResponse('Failed to send message');
+      setTelegramResponse(`Failed to send message: ${error.message}`);
     }
   };
 
@@ -90,8 +96,12 @@ function App() {
     <div className="container">
       <header className="header">
         <h1>Booking System</h1>
-        <button className="deploy-button" onClick={triggerDeploy}>
-          Trigger Deploy
+        <button
+          className="deploy-button"
+          onClick={triggerDeploy}
+          disabled={deployLoading}
+        >
+          {deployLoading ? 'Deploying...' : 'Trigger Deploy'}
         </button>
         <p>{deployResponse}</p>
       </header>
@@ -138,9 +148,9 @@ function App() {
                   <ul>
                     {booking.participants.map((participant) => (
                       <li key={participant.id}>
-                        {/* {participant.name || 'No name'}{' '} */}
-                        Contact: {participant.phone || 'No phone'}{' '}
-                        Topic: {participant.theme || 'No theme'}
+                        {participant.name || 'No name'}{' '}
+                        {participant.phone || 'No phone'}{' '}
+                        {participant.theme || 'No theme'}
                         <button
                           onClick={() =>
                             deleteParticipant(booking._id, participant.id)

@@ -36,6 +36,14 @@ body {
   margin-top: 10px;
 }
 
+.deploy-button:disabled {
+  background-color: #BDBDBD;
+}
+
+.deploy-button:disabled:hover {
+  background-color: #BDBDBD;
+}
+
 .deploy-button:hover {
   background-color: #E64A19;
 }
@@ -139,10 +147,18 @@ textarea {
   }
 
   .add-booking h2 {
+    font-size:1.2em;
+  }
+
+  h2 {
     font-size: 1.2em;
   }
 
-  .bookings h2 {
-    font-size: 1.2em;
+  .deploy-button:disabled {
+    background-color: #BDBDBD;
+  }
+
+  .deploy-button:disabled:hover {
+    background-color: #BDBDBD;
   }
 }
