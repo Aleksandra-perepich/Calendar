@@ -104,7 +104,7 @@ function App() {
               <div className="booking-info">
                 <span>{booking.date}</span>
                 <span>{booking.time}</span>
-                <span>{booking.themes.join(', ')}</span>
+                <span>{booking.themes.join(',')}</span>
                 <button
                   onClick={() => deleteBooking(booking._id)}
                   disabled={loading}
@@ -117,8 +117,8 @@ function App() {
                   participant ? (
                     <li key={participant.id} className="participant-item">
                       <span>{participant.name || 'No name'}</span>
-                      <span>{participant.phone || 'No phone'}</span>
-                      <span>{participant.theme || 'No theme'}</span>
+                      <span>Contact: {participant.phone || 'No phone'}</span>
+                      <span>Theme: {participant.theme || 'No theme'}</span>
                       <button
                         onClick={() =>
                           deleteParticipant(booking._id, participant.id)
