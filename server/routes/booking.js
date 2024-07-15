@@ -111,7 +111,7 @@ router.post(
       const response = await axios.post(
         `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
         {
-          chat_id: '-2189653449',
+          chat_id: '-1002189653449',
           text: message,
         }
       );
