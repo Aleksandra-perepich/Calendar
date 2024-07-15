@@ -69,7 +69,7 @@ function App() {
     setDeployLoading(true);
     try {
       const response = await axios.post(
-        'https://api.render.com/deploy/srv-cq051aqju9rs73aoguf0?key=JbMC93Cy3E8'
+        'https://api.render.com/deploy/srv-cq8kq156l47c73cvujj0?key=uteeLI_6RkA'
       );
       setDeployResponse(
         `Deploy triggered successfully: ${JSON.stringify(response.data)}`
