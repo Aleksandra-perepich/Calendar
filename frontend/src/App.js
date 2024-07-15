@@ -83,9 +83,12 @@ function App() {
 
   const sendMessageToTelegram = async () => {
     try {
-      const response = await axios.post('/api/sendTelegramMessage', {
-        message,
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/api/bookings/sendTelegramMessage`,
+        {
+          message,
+        }
+      );
       setTelegramResponse(response.data.message);
     } catch (error) {
       setTelegramResponse(`Failed to send message: ${error.message}`);
