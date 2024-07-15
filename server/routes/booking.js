@@ -102,7 +102,7 @@ router.delete('/:bookingId/participants/:userId', async (req, res) => {
   }
 });
 
-app.post(
+router.post(
   `/sendTelegramMessage`,
   async (req, res) => {
     const { message } = req.body;
