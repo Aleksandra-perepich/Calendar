@@ -36,28 +36,28 @@ const bot = new Telegraf(BOT_TOKEN);
 bot.telegram.setWebhook(`${URL}/bot${BOT_TOKEN}`);
 app.use(bot.webhookCallback(`/bot${BOT_TOKEN}`));
 
-app.post(`${process.env.REACT_APP_SERVER_URL}/api/sendTelegramMessage`, async (req, res) => {
-  const { message } = req.body;
+// app.post(`${process.env.REACT_APP_SERVER_URL}/api/sendTelegramMessage`, async (req, res) => {
+//   const { message } = req.body;
 
-  try {
-    const response = await axios.post(
-      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
-      {
-        chat_id: '@EngTalksChannel', //'-1002189653449',
-        text: message,
-      }
-    );
-    res.status(200).send(response.data);
-  } catch (error) {
-    console.error(
-      'Error sending message:',
-      error.response ? error.response.data : error.message
-    );
-    res
-      .status(error.response ? error.response.status : 500)
-      .send(error.message);
-  }
-});
+//   try {
+//     const response = await axios.post(
+//       `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+//       {
+//         chat_id: '@EngTalksChannel', //'-1002189653449',
+//         text: message,
+//       }
+//     );
+//     res.status(200).send(response.data);
+//   } catch (error) {
+//     console.error(
+//       'Error sending message:',
+//       error.response ? error.response.data : error.message
+//     );
+//     res
+//       .status(error.response ? error.response.status : 500)
+//       .send(error.message);
+//   }
+// });
 
 // Переменные для хранения состояния пользователя
 const userState = {};

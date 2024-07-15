@@ -1,6 +1,9 @@
 const express = require('express');
 const Booking = require('../models/Booking');
+const axios = require('axios');
 const router = express.Router();
+
+const BOT_TOKEN = process.env.BOT_TOKEN;
 
 // Получение всех записей
 router.get('/', async (req, res) => {
@@ -98,5 +101,32 @@ router.delete('/:bookingId/participants/:userId', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+app.post(
+  `/sendTelegramMessage`,
+  async (req, res) => {
+    const { message } = req.body;
+
+    try {
+      const response = await axios.post(
+        `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+        {
+          chat_id: '-2189653449',
+          text: message,
+        }
+      );
+      res.status(200).send(response.data);
+    } catch (error) {
+      console.error(
+        'Error sending message:',
+        error.response ? error.response.data : error.message
+      );
+      res
+        .status(error.response ? error.response.status : 500)
+        .send(error.message);
+    }
+  }
+);
+
 
 module.exports = router;
