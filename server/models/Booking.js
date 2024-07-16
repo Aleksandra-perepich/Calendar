@@ -13,6 +13,10 @@ const BookingSchema = new mongoose.Schema({
   themes: { type: Array, required: true },
   level: { type: String, required: true },
   participants: [ParticipantSchema],
+  notificationSent: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model('Booking', BookingSchema);

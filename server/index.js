@@ -5,6 +5,9 @@ const bookingRoutes = require('./routes/booking');
 const { Telegraf, Markup } = require('telegraf');
 const axios = require('axios');
 const cors = require('cors');
+const cron = require('node-cron');
+const Booking = require('./models/Booking');
+const moment = require('moment-timezone');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -35,29 +38,62 @@ const bot = new Telegraf(BOT_TOKEN);
 // Настройка webhook
 bot.telegram.setWebhook(`${URL}/bot${BOT_TOKEN}`);
 app.use(bot.webhookCallback(`/bot${BOT_TOKEN}`));
+const CHAT_ID = '-1002189653449';
 
-// app.post(`${process.env.REACT_APP_SERVER_URL}/api/sendTelegramMessage`, async (req, res) => {
-//   const { message } = req.body;
+cron.schedule('*/10 * * * *', async () => {
+  try {
+    // Текущее местное время
+    const nowLocal = moment.tz(SERVER_TIMEZONE);
+    // Время через час в местном времени
+    const oneHourLaterLocal = nowLocal.clone().add(1, 'hours');
 
-//   try {
-//     const response = await axios.post(
-//       `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
-//       {
-//         chat_id: '@EngTalksChannel', //'-1002189653449',
-//         text: message,
-//       }
-//     );
-//     res.status(200).send(response.data);
-//   } catch (error) {
-//     console.error(
-//       'Error sending message:',
-//       error.response ? error.response.data : error.message
-//     );
-//     res
-//       .status(error.response ? error.response.status : 500)
-//       .send(error.message);
-//   }
-// });
+    // Преобразование местного времени в формат UTC для поиска в базе данных
+    const nowUtc = nowLocal.clone().utc();
+    const oneHourLaterUtc = oneHourLaterLocal.clone().utc();
+
+    // Форматирование даты и времени для поиска
+    // const currentDate = nowUtc.format('YYYY-MM-DD');
+    // const currentTime = nowUtc.format('HH:mm');
+    // const oneHourLaterTime = oneHourLaterUtc.format('HH:mm');
+
+    const currentDate = nowLocal.format('YYYY-MM-DD');
+    const currentTime = nowLocal.format('HH:mm');
+    const oneHourLaterTime = oneHourLaterLocal.format('HH:mm');
+
+    console.log(`Текущая дата и время (местное): ${nowLocal.format()}`);
+    console.log(`Текущая дата и время (UTC): ${nowUtc.format()}`);
+    console.log(
+      `Ищем события на дату: ${currentDate} и время: до ${oneHourLaterTime}`
+    );
+
+    // Поиск событий, которые начнутся через час или меньше и уведомления для которых еще не были отправлены
+    const bookings = await Booking.find({
+      date: currentDate,
+      time: {
+        $gte: currentTime,
+        $lte: oneHourLaterTime,
+      },
+      notificationSent: false,
+    });
+
+    console.log(`Найдено событий: ${bookings.length}`);
+
+    // Отправка уведомлений
+    bookings.forEach(async (booking) => {
+      const message = `Speaking Club уровень ${booking.level} состоится ${booking.date} ${booking.time}`;
+      await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        chat_id: CHAT_ID, // Замените на ваш chat_id
+        text: message,
+      });
+
+      // Обновление поля notificationSent
+      booking.notificationSent = true;
+      await booking.save();
+    });
+  } catch (error) {
+    console.error('Error sending notifications:', error);
+  }
+});
 
 // Переменные для хранения состояния пользователя
 const userState = {};
