@@ -65,6 +65,14 @@ router.post('/', async (req, res) => {
     if (booking.participants.length < 5) {
       booking.participants.push({ id: userId, theme, phone, name });
       await booking.save();
+
+      // Отправка уведомления вам
+      const message = `Новый участник на Speaking Club:\n\nТелефон: ${phone}\nУровень: ${level}\nДата: ${date}\nВремя: ${time}\nТема: ${theme}`;
+      await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        chat_id: '504424760', //send to DM
+        text: message,
+      });
+
       res.json({ success: true });
     } else {
       res.json({ success: false, message: 'Booking is full' });
