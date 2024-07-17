@@ -133,4 +133,30 @@ router.post(`/sendTelegramMessage`, async (req, res) => {
   }
 });
 
+// Отправка сообщений участникам события
+router.post('/notifyParticipants', async (req, res) => {
+  const { bookingId, chosenTheme, additionalText } = req.body;
+
+  try {
+    const booking = await Booking.findById(bookingId);
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    const message = `Внимание! Предстоящий Speaking Club:\n\nДата: ${booking.date}\nВремя: ${booking.time}\nУровень: ${booking.level}\nТема: ${chosenTheme}\n\nСписок вопрос по теме:\n${additionalText}`;
+
+    for (const participant of booking.participants) {
+      await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        chat_id: participant.id,
+        text: message,
+      });
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+
 module.exports = router;

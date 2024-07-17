@@ -115,6 +115,20 @@ textarea {
   resize: none;
 }
 
+.radio-section {
+  display: flex;
+}
+
+.radio-section input {
+  width: 50px;
+}
+
+.radio-section span {
+  display: inline-block;
+  width: 100%;
+}
+
+
 /* Mobile Styles */
 @media (max-width: 768px) {
   .header {

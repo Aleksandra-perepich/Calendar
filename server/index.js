@@ -12,6 +12,7 @@ const moment = require('moment-timezone');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const URL = process.env.URL; // URL вашего сервера
+const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 // Подключение к MongoDB
 const MONGO_URI = process.env.MONGO_URI;

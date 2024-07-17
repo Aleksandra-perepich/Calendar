@@ -15,6 +15,9 @@ function App() {
   const [deployResponse, setDeployResponse] = useState('');
   const [telegramResponse, setTelegramResponse] = useState('');
   const [deployLoading, setDeployLoading] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState('');
+  const [chosenTheme, setChosenTheme] = useState('');
+  const [additionalText, setAdditionalText] = useState('');
 
   useEffect(() => {
     fetchBookings(level);
@@ -95,6 +98,23 @@ function App() {
     }
   };
 
+  const handleNotify = async () => {
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/api/bookings/notifyParticipants`,
+        {
+          bookingId: selectedBooking,
+          chosenTheme,
+          additionalText,
+        }
+      );
+      alert('Сообщения успешно отправлены участникам.');
+    } catch (err) {
+      console.error(err);
+      alert('Ошибка при отправке сообщений.');
+    }
+  };
+
   return (
     <div className="container">
       <header className="header">
@@ -136,6 +156,46 @@ function App() {
             <button onClick={addBooking}>Add Date</button>
           </div>
         </section>
+
+        <section className="controls">
+          <h2>Уведомление участников события</h2>
+          <select
+            value={selectedBooking}
+            onChange={(e) => setSelectedBooking(e.target.value)}
+          >
+            <option value="">Выберите событие</option>
+            {bookings.map((booking) => (
+              <option key={booking._id} value={booking._id}>
+                {booking.date} {booking.time} - {booking.level}
+              </option>
+            ))}
+          </select>
+          {selectedBooking && (
+            <>
+              <h3>Темы</h3>
+              {bookings
+                .find((booking) => booking._id === selectedBooking)
+                .themes.map((theme, index) => (
+                  <div key={index} className="radio-section">
+                    <span>{theme}</span>
+                    <input
+                      type="radio"
+                      name="theme"
+                      value={theme}
+                      onChange={(e) => setChosenTheme(e.target.value)}
+                    />
+                  </div>
+                ))}
+              <textarea
+                placeholder="Список вопрос по теме"
+                value={additionalText}
+                onChange={(e) => setAdditionalText(e.target.value)}
+              />
+              <button onClick={handleNotify}>Отправить уведомления</button>
+            </>
+          )}
+        </section>
+
         <section className="bookings">
           <h2>Available Dates</h2>
           {loading ? (
