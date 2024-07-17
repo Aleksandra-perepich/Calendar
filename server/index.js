@@ -40,7 +40,10 @@ bot.telegram.setWebhook(`${URL}/bot${BOT_TOKEN}`);
 app.use(bot.webhookCallback(`/bot${BOT_TOKEN}`));
 const CHAT_ID = '-1002189653449';
 
-cron.schedule('*/10 * * * *', async () => {
+// Cron-задача для отправки уведомлений за час до события
+const SERVER_TIMEZONE = 'Europe/Moscow'; // замените на ваш часовой пояс
+
+cron.schedule('*/30 * * * *', async () => {
   try {
     // Текущее местное время
     const nowLocal = moment.tz(SERVER_TIMEZONE);
@@ -228,6 +231,7 @@ bot.on('text', async (ctx) => {
     case 'enterPhone':
       const { date, time, level, theme, name } = state;
       const phone = ctx.message.text;
+      const username = ctx.from.username || 'Не указано';
 
       try {
         const response = await axios.post(
@@ -240,6 +244,7 @@ bot.on('text', async (ctx) => {
             phone,
             name,
             userId: ctx.from.id,
+            username,
           }
         );
 

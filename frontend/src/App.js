@@ -151,7 +151,7 @@ function App() {
                   <ul>
                     {booking.participants.map((participant) => (
                       <li key={participant.id}>
-                        {participant.name || 'No name'}{' '}
+                        {participant.username || ' '}{' '}
                         {participant.phone || 'No phone'}{' '}
                         {participant.theme || 'No theme'}
                         <button

@@ -49,7 +49,7 @@ router.post('/create', async (req, res) => {
 
 // Регистрация участника на событие
 router.post('/', async (req, res) => {
-  const { date, time, level, userId, theme, phone, name } = req.body;
+  const { date, time, level, userId, theme, phone, name, username } = req.body;
 
   if (!phone) {
     return res.status(400).json({ message: 'Phone is required' });
@@ -67,7 +67,7 @@ router.post('/', async (req, res) => {
       await booking.save();
 
       // Отправка уведомления вам
-      const message = `Новый участник на Speaking Club:\n\nТелефон: ${phone}\nУровень: ${level}\nДата: ${date}\nВремя: ${time}\nТема: ${theme}`;
+      const message = `Новый участник на Speaking Club:\n\nИмя пользователя: @${username}\nТелефон: ${phone}\nУровень: ${level}\nДата: ${date}\nВремя: ${time}\nТема: ${theme}\n`;
       await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         chat_id: '504424760', //send to DM
         text: message,
@@ -110,31 +110,27 @@ router.delete('/:bookingId/participants/:userId', async (req, res) => {
   }
 });
 
-router.post(
-  `/sendTelegramMessage`,
-  async (req, res) => {
-    const { message } = req.body;
+router.post(`/sendTelegramMessage`, async (req, res) => {
+  const { message } = req.body;
 
-    try {
-      const response = await axios.post(
-        `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
-        {
-          chat_id: '-1002189653449',
-          text: message,
-        }
-      );
-      res.status(200).send(response.data);
-    } catch (error) {
-      console.error(
-        'Error sending message:',
-        error.response ? error.response.data : error.message
-      );
-      res
-        .status(error.response ? error.response.status : 500)
-        .send(error.message);
-    }
+  try {
+    const response = await axios.post(
+      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+      {
+        chat_id: '-1002189653449',
+        text: message,
+      }
+    );
+    res.status(200).send(response.data);
+  } catch (error) {
+    console.error(
+      'Error sending message:',
+      error.response ? error.response.data : error.message
+    );
+    res
+      .status(error.response ? error.response.status : 500)
+      .send(error.message);
   }
-);
-
+});
 
 module.exports = router;
